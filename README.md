@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ⭕ Morpion — Tic Tac Toe
 
 Un jeu de Morpion moderne, immersif et 100 % responsive, en HTML / CSS / JavaScript pur (zéro dépendance, zéro framework).
@@ -150,3 +151,7 @@ Chaque module est une **IIFE** qui expose une API publique. Aucune variable glob
 - [ ] Option couleur personnalisée pour X/O
 - [ ] Mode tournoi (best of 3 / 5)
 - [ ] Plus de skins (papier, craie, espace…)
+=======
+# TicTacToe
+https://breizhimic.github.io/TicTacToe/
+>>>>>>> 985401f42f44f4f772f9f0ae7b89d94bf3ebea5e
