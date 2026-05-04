@@ -1,99 +1,90 @@
 /* =========================================================
-   SKINS — Différents looks pour la grille / X / O
+   SKINS — Apparences visuelles des marques X et O
    ========================================================= */
 
-/* ---------- CLASSIQUE (par défaut) ---------- */
+/* ---------- CLASSIQUE (défaut) ---------- */
 body[data-skin="classic"] {
   --x-color: #00d4ff;
   --o-color: #ff006e;
 }
 
-/* ---------- NÉON ---------- */
+/* ---------- NEON ---------- */
 body[data-skin="neon"] {
-  --x-color: #00ffff;
+  --x-color: #00ffcc;
   --o-color: #ff00ff;
-  --grid-line: rgba(0, 255, 255, 0.4);
-  --cell-bg: rgba(20, 0, 40, 0.55);
-  --cell-bg-hover: rgba(0, 255, 255, 0.12);
+  --grid-line: rgba(0, 255, 204, 0.20);
+  --cell-bg: rgba(0, 10, 20, 0.7);
+  --cell-bg-hover: rgba(0, 255, 204, 0.06);
+  --shadow-glow: 0 0 30px rgba(0, 255, 204, 0.40);
 }
 body[data-skin="neon"] .board {
-  background: #0a0420;
-  box-shadow:
-    inset 0 0 40px rgba(255, 0, 255, 0.18),
-    0 0 50px rgba(0, 255, 255, 0.18);
+  background: linear-gradient(135deg, #000a14, #000820);
 }
 body[data-skin="neon"] .cell.x .mark {
   text-shadow:
-    0 0 8px var(--x-color),
-    0 0 18px var(--x-color),
-    0 0 32px var(--x-color);
+    0 0 8px  #00ffcc,
+    0 0 20px #00ffcc,
+    0 0 40px #00ffcc;
 }
 body[data-skin="neon"] .cell.o .mark {
   text-shadow:
-    0 0 8px var(--o-color),
-    0 0 18px var(--o-color),
-    0 0 32px var(--o-color);
+    0 0 8px  #ff00ff,
+    0 0 20px #ff00ff,
+    0 0 40px #ff00ff;
 }
 body[data-skin="neon"] .cell {
-  border-width: 2px;
+  border-color: rgba(0, 255, 204, 0.15);
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
-/* ---------- MINIMALISTE ---------- */
+/* ---------- MINIMAL ---------- */
 body[data-skin="minimal"] {
-  --x-color: #1f2937;
-  --o-color: #6b7280;
-  --grid-line: rgba(150, 150, 160, 0.25);
-  --cell-bg: rgba(255, 255, 255, 0.03);
-  --cell-bg-hover: rgba(255, 255, 255, 0.07);
+  --x-color: #334155;
+  --o-color: #64748b;
+  --grid-line: rgba(51, 65, 85, 0.30);
+  --cell-bg: transparent;
+  --cell-bg-hover: rgba(51, 65, 85, 0.06);
+  --shadow-glow: none;
 }
 body[data-skin="minimal"][data-theme="dark"],
 body[data-skin="minimal"][data-theme="cyber"] {
-  --x-color: #f1f5f9;
+  --x-color: #e2e8f0;
   --o-color: #94a3b8;
 }
 body[data-skin="minimal"] .cell {
-  border-width: 1px;
+  border-radius: 0;
+  border-color: var(--grid-line);
 }
 body[data-skin="minimal"] .cell.x .mark,
 body[data-skin="minimal"] .cell.o .mark {
+  font-weight: 300;
   text-shadow: none;
-  font-weight: 200;
-  font-size: 1.1em;
+  filter: none;
 }
 body[data-skin="minimal"] .board {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  border-width: 1px;
+  gap: 0;
 }
 
-/* ---------- ARCADE (8-bit) ---------- */
+/* ---------- ARCADE ---------- */
 body[data-skin="arcade"] {
-  --x-color: #ffeb3b;
-  --o-color: #f44336;
-  --grid-line: #4caf50;
-  --cell-bg: #0d2818;
-  --cell-bg-hover: #1a4030;
+  --x-color: #fbbf24;
+  --o-color: #f87171;
+  --grid-line: rgba(251, 191, 36, 0.20);
+  --cell-bg: rgba(10, 5, 0, 0.7);
+  --cell-bg-hover: rgba(251, 191, 36, 0.08);
+  --shadow-glow: 0 0 20px rgba(251, 191, 36, 0.30);
 }
 body[data-skin="arcade"] .board {
-  background: #000;
-  box-shadow:
-    inset 0 0 0 4px #4caf50,
-    0 8px 30px rgba(0, 0, 0, 0.6);
-  border-radius: 4px;
+  background: linear-gradient(135deg, #0a0500, #150a00);
+  border: 2px solid rgba(251, 191, 36, 0.35);
 }
 body[data-skin="arcade"] .cell {
-  border-width: 2px;
-  border-radius: 0;
-  font-family: "Courier New", monospace;
-  font-weight: 700;
-  image-rendering: pixelated;
+  border-color: rgba(251, 191, 36, 0.15);
+  border-radius: 4px;
 }
 body[data-skin="arcade"] .cell .mark {
-  text-shadow:
-     2px 2px 0 #000,
-    -2px 2px 0 #000,
-     2px -2px 0 #000,
-    -2px -2px 0 #000;
-  letter-spacing: -2px;
+  font-family: "Courier New", monospace;
+  font-weight: 700;
 }
 
 /* ---------- NATURE ---------- */

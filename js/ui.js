@@ -204,17 +204,7 @@ const UI = (() => {
   function renderReset() {
     const s = Game.getPublicState();
     buildBoard(s.size);
-    // Efface le trait gagnant SANS transition (sinon il se replie en 0.6s
-    // et reste visible pendant la nouvelle partie).
-    els.winline.classList.add("no-anim");
     els.winline.classList.remove("show");
-    els.winlineSeg.setAttribute("x1", 0);
-    els.winlineSeg.setAttribute("y1", 0);
-    els.winlineSeg.setAttribute("x2", 0);
-    els.winlineSeg.setAttribute("y2", 0);
-    // Force un reflow puis réactive la transition pour la prochaine victoire
-    void els.winline.getBoundingClientRect();
-    els.winline.classList.remove("no-anim");
     renderTurn(s.currentPlayer);
     refreshScoreboard();
     els.btnUndo.disabled = true;
@@ -696,16 +686,7 @@ const UI = (() => {
       span.textContent = symbolFor(m.player);
       cell.appendChild(span);
     });
-    // Efface le trait de victoire SANS transition (sinon il reste visible
-    // pendant 0.6s pendant la nouvelle partie).
-    els.winline.classList.add("no-anim");
     els.winline.classList.remove("show");
-    els.winlineSeg.setAttribute("x1", 0);
-    els.winlineSeg.setAttribute("y1", 0);
-    els.winlineSeg.setAttribute("x2", 0);
-    els.winlineSeg.setAttribute("y2", 0);
-    void els.winline.getBoundingClientRect();
-    els.winline.classList.remove("no-anim");
     renderTurn(s.currentPlayer);
     els.btnUndo.disabled = s.moves.length === 0;
   }
