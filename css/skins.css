@@ -1,0 +1,123 @@
+/* =========================================================
+   SKINS — Différents looks pour la grille / X / O
+   ========================================================= */
+
+/* ---------- CLASSIQUE (par défaut) ---------- */
+body[data-skin="classic"] {
+  --x-color: #00d4ff;
+  --o-color: #ff006e;
+}
+
+/* ---------- NÉON ---------- */
+body[data-skin="neon"] {
+  --x-color: #00ffff;
+  --o-color: #ff00ff;
+  --grid-line: rgba(0, 255, 255, 0.4);
+  --cell-bg: rgba(20, 0, 40, 0.55);
+  --cell-bg-hover: rgba(0, 255, 255, 0.12);
+}
+body[data-skin="neon"] .board {
+  background: #0a0420;
+  box-shadow:
+    inset 0 0 40px rgba(255, 0, 255, 0.18),
+    0 0 50px rgba(0, 255, 255, 0.18);
+}
+body[data-skin="neon"] .cell.x .mark {
+  text-shadow:
+    0 0 8px var(--x-color),
+    0 0 18px var(--x-color),
+    0 0 32px var(--x-color);
+}
+body[data-skin="neon"] .cell.o .mark {
+  text-shadow:
+    0 0 8px var(--o-color),
+    0 0 18px var(--o-color),
+    0 0 32px var(--o-color);
+}
+body[data-skin="neon"] .cell {
+  border-width: 2px;
+}
+
+/* ---------- MINIMALISTE ---------- */
+body[data-skin="minimal"] {
+  --x-color: #1f2937;
+  --o-color: #6b7280;
+  --grid-line: rgba(150, 150, 160, 0.25);
+  --cell-bg: rgba(255, 255, 255, 0.03);
+  --cell-bg-hover: rgba(255, 255, 255, 0.07);
+}
+body[data-skin="minimal"][data-theme="dark"],
+body[data-skin="minimal"][data-theme="cyber"] {
+  --x-color: #f1f5f9;
+  --o-color: #94a3b8;
+}
+body[data-skin="minimal"] .cell {
+  border-width: 1px;
+}
+body[data-skin="minimal"] .cell.x .mark,
+body[data-skin="minimal"] .cell.o .mark {
+  text-shadow: none;
+  font-weight: 200;
+  font-size: 1.1em;
+}
+body[data-skin="minimal"] .board {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border-width: 1px;
+}
+
+/* ---------- ARCADE (8-bit) ---------- */
+body[data-skin="arcade"] {
+  --x-color: #ffeb3b;
+  --o-color: #f44336;
+  --grid-line: #4caf50;
+  --cell-bg: #0d2818;
+  --cell-bg-hover: #1a4030;
+}
+body[data-skin="arcade"] .board {
+  background: #000;
+  box-shadow:
+    inset 0 0 0 4px #4caf50,
+    0 8px 30px rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+}
+body[data-skin="arcade"] .cell {
+  border-width: 2px;
+  border-radius: 0;
+  font-family: "Courier New", monospace;
+  font-weight: 700;
+  image-rendering: pixelated;
+}
+body[data-skin="arcade"] .cell .mark {
+  text-shadow:
+     2px 2px 0 #000,
+    -2px 2px 0 #000,
+     2px -2px 0 #000,
+    -2px -2px 0 #000;
+  letter-spacing: -2px;
+}
+
+/* ---------- NATURE ---------- */
+body[data-skin="nature"] {
+  --x-color: #ec4899;
+  --o-color: #22c55e;
+  --grid-line: rgba(34, 197, 94, 0.25);
+  --cell-bg: rgba(20, 40, 25, 0.5);
+  --cell-bg-hover: rgba(34, 197, 94, 0.1);
+}
+body[data-skin="nature"] .board {
+  background: linear-gradient(135deg, #0d2818, #1a3324);
+}
+body[data-skin="nature"] .cell.x .mark,
+body[data-skin="nature"] .cell.o .mark {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+/* ---------- EMOJI ---------- */
+body[data-skin="emoji"] .cell.x .mark,
+body[data-skin="emoji"] .cell.o .mark {
+  text-shadow: none;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+/* Le moteur du jeu remplace les marks selon le skin via JS */

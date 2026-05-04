@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#0f0f1e" />
+  <title>⭕ Morpion — Tic Tac Toe</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f0f1e'/%3E%3Ccircle cx='22' cy='32' r='11' fill='none' stroke='%2300e5ff' stroke-width='5' stroke-linecap='round'/%3E%3Cline x1='34' y1='21' x2='52' y2='43' stroke='%23ff00aa' stroke-width='5' stroke-linecap='round'/%3E%3Cline x1='52' y1='21' x2='34' y2='43' stroke='%23ff00aa' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/skins.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+</head>
+<body data-theme="dark" data-skin="classic">
+
+  <!-- Particules d'arrière-plan (confettis) -->
+  <canvas id="particles"></canvas>
+
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">⭕</span>
+      <h1>MORPION</h1>
+    </div>
+    <nav class="topbar-actions">
+      <button class="icon-btn" id="btnStats"   title="Statistiques">📊</button>
+      <button class="icon-btn" id="btnHistory" title="Historique">🕘</button>
+      <button class="icon-btn" id="btnAchievements" title="Succès">🏆</button>
+      <button class="icon-btn" id="btnSound"  title="Son">🔊</button>
+      <button class="icon-btn" id="btnSettings" title="Options">⚙️</button>
+    </nav>
+  </header>
+
+  <!-- LAYOUT PRINCIPAL -->
+  <main class="layout">
+
+    <!-- COLONNE GAUCHE : RÉGLAGES -->
+    <aside class="panel panel-left">
+      <section class="card">
+        <h2>🎮 MODE</h2>
+        <div class="seg" role="tablist" id="modeSeg">
+          <button class="seg-btn active" data-mode="ai">vs IA</button>
+          <button class="seg-btn" data-mode="pvp">vs Joueur</button>
+        </div>
+      </section>
+
+      <section class="card" id="diffCard">
+        <h2>⚔️ DIFFICULTÉ</h2>
+        <div class="seg" id="diffSeg">
+          <button class="seg-btn" data-diff="easy">Facile</button>
+          <button class="seg-btn active" data-diff="medium">Moyen</button>
+          <button class="seg-btn" data-diff="hard">Difficile</button>
+        </div>
+        <p class="hint" id="diffHint">L'IA bloque vos coups gagnants.</p>
+      </section>
+
+      <section class="card">
+        <h2>📐 GRILLE</h2>
+        <div class="seg" id="sizeSeg">
+          <button class="seg-btn active" data-size="3">3×3</button>
+          <button class="seg-btn" data-size="4">4×4</button>
+          <button class="seg-btn" data-size="5">5×5</button>
+        </div>
+        <p class="hint">3 alignés (3×3) · 4 (4×4) · 5 (5×5)</p>
+      </section>
+
+      <section class="card">
+        <h2>🎨 SKIN</h2>
+        <div class="skin-grid" id="skinGrid">
+          <button class="skin-tile active" data-skin="classic">
+            <span class="sx">X</span><span class="so">O</span>
+            <em>Classique</em>
+          </button>
+          <button class="skin-tile" data-skin="neon">
+            <span class="sx">X</span><span class="so">O</span>
+            <em>Néon</em>
+          </button>
+          <button class="skin-tile" data-skin="minimal">
+            <span class="sx">X</span><span class="so">O</span>
+            <em>Minimal</em>
+          </button>
+          <button class="skin-tile" data-skin="arcade">
+            <span class="sx">X</span><span class="so">O</span>
+            <em>Arcade</em>
+          </button>
+          <button class="skin-tile" data-skin="nature">
+            <span class="sx">🌸</span><span class="so">🍃</span>
+            <em>Nature</em>
+          </button>
+          <button class="skin-tile" data-skin="emoji">
+            <span class="sx">😎</span><span class="so">🤖</span>
+            <em>Emoji</em>
+          </button>
+        </div>
+      </section>
+    </aside>
+
+    <!-- COLONNE CENTRE : JEU -->
+    <section class="panel panel-center">
+      <!-- Bandeau de score -->
+      <div class="scoreboard">
+        <div class="score score-x">
+          <span class="score-label" id="labelX">JOUEUR</span>
+          <span class="score-symbol">X</span>
+          <span class="score-value" id="scoreX">0</span>
+        </div>
+        <div class="score score-draw">
+          <span class="score-label">NULS</span>
+          <span class="score-symbol">=</span>
+          <span class="score-value" id="scoreD">0</span>
+        </div>
+        <div class="score score-o">
+          <span class="score-label" id="labelO">IA</span>
+          <span class="score-symbol">O</span>
+          <span class="score-value" id="scoreO">0</span>
+        </div>
+      </div>
+
+      <!-- Statut du jeu -->
+      <div class="status" id="status">
+        <span class="turn-dot" id="turnDot"></span>
+        <span id="statusText">À vous de jouer</span>
+      </div>
+
+      <!-- Grille de jeu -->
+      <div class="board-wrap">
+        <div class="board" id="board" data-size="3"></div>
+        <svg class="winline" id="winline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <line id="winlineSeg" x1="0" y1="0" x2="0" y2="0" />
+        </svg>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button class="btn btn-primary" id="btnNewGame">
+          <span>♻️</span> Nouvelle partie
+        </button>
+        <button class="btn btn-ghost" id="btnUndo" title="Annuler" disabled>
+          <span>↩</span> Annuler
+        </button>
+      </div>
+
+      <!-- Série -->
+      <div class="streak" id="streakBox">
+        <span>🔥 Série actuelle : <strong id="streak">0</strong></span>
+        <span>⭐ Record : <strong id="bestStreak">0</strong></span>
+      </div>
+    </section>
+
+    <!-- COLONNE DROITE : INFOS / HISTORIQUE -->
+    <aside class="panel panel-right">
+      <section class="card">
+        <h2>📊 STATS</h2>
+        <ul class="stat-list">
+          <li><span>Parties</span><strong id="statGames">0</strong></li>
+          <li class="win"><span>Victoires</span><strong id="statWins">0</strong></li>
+          <li class="lose"><span>Défaites</span><strong id="statLosses">0</strong></li>
+          <li><span>Nuls</span><strong id="statDraws">0</strong></li>
+          <li><span>Taux de victoire</span><strong id="statRate">0%</strong></li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>🕘 HISTORIQUE</h2>
+        <ul class="history" id="historyList">
+          <li class="empty">Aucune partie jouée pour le moment.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>💡 ASTUCE</h2>
+        <p class="tip" id="tip">Le centre est la case la plus puissante du Morpion 3×3.</p>
+      </section>
+    </aside>
+
+  </main>
+
+  <!-- ============== MODALES ============== -->
+
+  <!-- Victoire / Défaite / Nul -->
+  <div class="modal" id="endModal" hidden>
+    <div class="modal-box pop">
+      <div class="modal-emoji" id="endEmoji">🎉</div>
+      <h2 class="modal-title" id="endTitle">Victoire !</h2>
+      <p class="modal-sub" id="endSub">Bien joué — vous avez battu l'IA.</p>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="endReplay">▶ Rejouer</button>
+        <button class="btn btn-ghost"   id="endClose">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div class="modal" id="settingsModal" hidden>
+    <div class="modal-box">
+      <button class="modal-close" data-close="settingsModal">✕</button>
+      <h2 class="modal-title">⚙️ Options</h2>
+
+      <div class="setting-row">
+        <label>🔊 Son</label>
+        <label class="switch">
+          <input type="checkbox" id="setSound" checked />
+          <span></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <label>🎵 Volume</label>
+        <input type="range" id="setVolume" min="0" max="100" value="60" />
+      </div>
+
+      <div class="setting-row">
+        <label>📳 Vibrations (mobile)</label>
+        <label class="switch">
+          <input type="checkbox" id="setVibrate" checked />
+          <span></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <label>✨ Animations</label>
+        <label class="switch">
+          <input type="checkbox" id="setAnims" checked />
+          <span></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <label>🎉 Confettis</label>
+        <label class="switch">
+          <input type="checkbox" id="setConfetti" checked />
+          <span></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <label>🧑 Nom du joueur</label>
+        <input type="text" id="setName" maxlength="14" placeholder="Joueur" />
+      </div>
+
+      <h3 class="modal-sub-title">🎨 Thème</h3>
+      <div class="theme-row" id="themeRow">
+        <button class="theme-btn" data-theme="dark"      title="Sombre">🌙</button>
+        <button class="theme-btn" data-theme="light"     title="Clair">🖥️</button>
+        <button class="theme-btn" data-theme="cyber"     title="Cyber">👾</button>
+        <button class="theme-btn" data-theme="nature"    title="Nature">🌿</button>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-danger" id="btnReset">🗑 Réinitialiser stats</button>
+        <button class="btn btn-primary" data-close="settingsModal">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="modal" id="statsModal" hidden>
+    <div class="modal-box">
+      <button class="modal-close" data-close="statsModal">✕</button>
+      <h2 class="modal-title">📊 Statistiques</h2>
+      <div class="stat-grid">
+        <div class="stat-cell"><span>Parties</span><strong id="mGames">0</strong></div>
+        <div class="stat-cell win"><span>Victoires</span><strong id="mWins">0</strong></div>
+        <div class="stat-cell lose"><span>Défaites</span><strong id="mLosses">0</strong></div>
+        <div class="stat-cell"><span>Nuls</span><strong id="mDraws">0</strong></div>
+        <div class="stat-cell"><span>Taux victoire</span><strong id="mRate">0%</strong></div>
+        <div class="stat-cell"><span>Coups moyens</span><strong id="mAvg">0</strong></div>
+        <div class="stat-cell"><span>Série actuelle</span><strong id="mStreak">0</strong></div>
+        <div class="stat-cell"><span>Meilleure série</span><strong id="mBest">0</strong></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-danger" id="btnResetStats">🗑 Réinitialiser</button>
+        <button class="btn btn-primary" data-close="statsModal">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Achievements -->
+  <div class="modal" id="achModal" hidden>
+    <div class="modal-box">
+      <button class="modal-close" data-close="achModal">✕</button>
+      <h2 class="modal-title">🏆 Succès</h2>
+      <ul class="ach-list" id="achList"></ul>
+      <div class="modal-actions">
+        <button class="btn btn-primary" data-close="achModal">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div class="modal" id="historyModal" hidden>
+    <div class="modal-box">
+      <button class="modal-close" data-close="historyModal">✕</button>
+      <h2 class="modal-title">🕘 Historique des parties</h2>
+      <ul class="history history-modal" id="historyListModal"></ul>
+      <div class="modal-actions">
+        <button class="btn btn-danger" id="btnClearHistory">🗑 Effacer</button>
+        <button class="btn btn-primary" data-close="historyModal">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast achievement -->
+  <div class="toast" id="toast" hidden>
+    <span class="toast-icon">🏆</span>
+    <div class="toast-body">
+      <strong id="toastTitle">Succès débloqué</strong>
+      <span id="toastDesc">Première victoire !</span>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

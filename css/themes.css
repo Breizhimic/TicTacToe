@@ -1,0 +1,104 @@
+/* =========================================================
+   THÈMES DE COULEUR (override des variables racine)
+   Inspiré du picker du Démineur : 🖥️ 🌙 👾 🌿
+   ========================================================= */
+
+/* ---------- DARK (par défaut, déjà dans :root) ---------- */
+body[data-theme="dark"] {
+  --bg: #0f0f1e;
+  --bg-2: #16213e;
+  --bg-3: #1a1a2e;
+  --card: rgba(22, 33, 62, 0.55);
+  --card-border: rgba(0, 212, 255, 0.18);
+  --text: #eaeaf0;
+  --text-dim: #a0a0b8;
+  --text-muted: #6b7280;
+  --accent: #00d4ff;
+  --accent-2: #00b8e0;
+}
+
+/* ---------- LIGHT ---------- */
+body[data-theme="light"] {
+  --bg: #f1f5f9;
+  --bg-2: #ffffff;
+  --bg-3: #e2e8f0;
+  --card: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(15, 23, 42, 0.08);
+  --card-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --text: #0f172a;
+  --text-dim: #475569;
+  --text-muted: #94a3b8;
+  --accent: #0ea5e9;
+  --accent-2: #0284c7;
+  --grid-line: rgba(14, 165, 233, 0.25);
+  --cell-bg: rgba(255, 255, 255, 0.5);
+  --cell-bg-hover: rgba(14, 165, 233, 0.08);
+  --shadow-glow: 0 0 18px rgba(14, 165, 233, 0.25);
+}
+body[data-theme="light"] {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(14, 165, 233, 0.1), transparent 60%),
+    radial-gradient(900px 500px at 110% 110%, rgba(236, 72, 153, 0.08), transparent 60%),
+    var(--bg);
+}
+body[data-theme="light"] .topbar {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+}
+body[data-theme="light"] .board {
+  background: #fff;
+  box-shadow:
+    inset 0 0 20px rgba(15, 23, 42, 0.06),
+    0 12px 40px rgba(15, 23, 42, 0.1);
+}
+
+/* ---------- CYBER ---------- */
+body[data-theme="cyber"] {
+  --bg: #05010f;
+  --bg-2: #0a0420;
+  --bg-3: #100828;
+  --card: rgba(20, 8, 48, 0.6);
+  --card-border: rgba(255, 0, 255, 0.25);
+  --text: #f0e7ff;
+  --text-dim: #b099d6;
+  --text-muted: #6b5b8e;
+  --accent: #ff00ff;
+  --accent-2: #c800c8;
+  --x-color: #00ffff;
+  --o-color: #ff00ff;
+  --grid-line: rgba(255, 0, 255, 0.3);
+  --cell-bg: rgba(10, 4, 32, 0.5);
+  --cell-bg-hover: rgba(255, 0, 255, 0.1);
+  --shadow-glow: 0 0 28px rgba(255, 0, 255, 0.4);
+}
+body[data-theme="cyber"] {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(255, 0, 255, 0.15), transparent 60%),
+    radial-gradient(900px 500px at 110% 110%, rgba(0, 255, 255, 0.12), transparent 60%),
+    var(--bg);
+}
+
+/* ---------- NATURE ---------- */
+body[data-theme="nature"] {
+  --bg: #0d1f12;
+  --bg-2: #14301f;
+  --bg-3: #1a3d27;
+  --card: rgba(20, 48, 31, 0.6);
+  --card-border: rgba(132, 204, 22, 0.2);
+  --text: #f0fdf4;
+  --text-dim: #a7d99c;
+  --text-muted: #6b7c5e;
+  --accent: #84cc16;
+  --accent-2: #65a30d;
+  --x-color: #ec4899;
+  --o-color: #84cc16;
+  --grid-line: rgba(132, 204, 22, 0.25);
+  --cell-bg: rgba(13, 31, 18, 0.55);
+  --cell-bg-hover: rgba(132, 204, 22, 0.1);
+  --shadow-glow: 0 0 24px rgba(132, 204, 22, 0.3);
+}
+body[data-theme="nature"] {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(132, 204, 22, 0.12), transparent 60%),
+    radial-gradient(900px 500px at 110% 110%, rgba(236, 72, 153, 0.08), transparent 60%),
+    var(--bg);
+}
