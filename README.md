@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 # ⭕ Morpion — Tic Tac Toe
 
 Un jeu de Morpion moderne, immersif et 100 % responsive, en HTML / CSS / JavaScript pur (zéro dépendance, zéro framework).
 
-Inspiré du style visuel du [Démineur](https://breizhimic.github.io/Demineur/) et du [Jeu de la Vie](https://breizhimic.github.io/JeuDeLaVie/).
-
----
 
 ## 🎮 Comment jouer ?
 
