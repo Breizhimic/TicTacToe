@@ -413,6 +413,19 @@ html, body {
   animation: winPulse 1s ease-in-out infinite;
 }
 
+/* Mode glissant : marque qui va disparaître au prochain coup */
+.cell.next-to-go {
+  border-color: rgba(255, 100, 0, 0.7);
+  box-shadow: 0 0 10px rgba(255, 100, 0, 0.35);
+}
+.cell.next-to-go .mark {
+  opacity: 0.4;
+}
+@keyframes fadeOutMark {
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
 @keyframes popIn {
   0%   { transform: scale(0)   rotate(-12deg); opacity: 0; }
   60%  { transform: scale(1.15) rotate(4deg);  opacity: 1; }

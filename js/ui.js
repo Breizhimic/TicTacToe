@@ -164,9 +164,10 @@ const UI = (() => {
     return (SKIN_SYMBOLS[skin] || SKIN_SYMBOLS.classic)[player];
   }
 
-  function renderMove({ index, player, byAI }) {
+  function renderMove({ index, player, byAI, removedIndex }) {
     const cell = els.board.querySelector(`.cell[data-index="${index}"]`);
     if (!cell) return;
+    cell.classList.remove("next-to-go");
     cell.classList.add("filled", player.toLowerCase());
     const span = document.createElement("span");
     span.className = "mark";
@@ -176,9 +177,29 @@ const UI = (() => {
     if (byAI) SoundFX.clickAI();
     else      SoundFX.clickPlayer();
 
-    // Compteur stats globaux
     store.stats.totalMoves++;
     saveStore();
+  }
+
+  // Supprime visuellement une marque (mode glissant)
+  function renderRemove({ index, player }) {
+    const cell = els.board.querySelector(`.cell[data-index="${index}"]`);
+    if (!cell) return;
+    cell.classList.remove("filled", "x", "o", "next-to-go");
+    cell.innerHTML = "";
+  }
+
+  // Surligne la prochaine marque qui va disparaître pour chaque joueur
+  function updateNextToGo(marksByPlayer) {
+    // Retirer tous les surlignages existants
+    els.board.querySelectorAll(".next-to-go").forEach(c => c.classList.remove("next-to-go"));
+    ["X","O"].forEach(player => {
+      const marks = marksByPlayer[player];
+      if (marks.length >= Game.MAX_MARKS) {
+        const cell = els.board.querySelector(`.cell[data-index="${marks[0]}"]`);
+        if (cell) cell.classList.add("next-to-go");
+      }
+    });
   }
 
   function renderTurn(player) {
@@ -571,7 +592,7 @@ const UI = (() => {
   function cacheEls() {
     [
       "btnStats","btnHistory","btnAchievements","btnSound","btnSettings",
-      "modeSeg","diffSeg","sizeSeg","skinGrid","diffCard","diffHint",
+      "modeSeg","slidingSeg","diffSeg","sizeSeg","skinGrid","diffCard","diffHint","sizeCard","slidingHint",
       "scoreX","scoreO","scoreD","labelX","labelO",
       "status","statusText","turnDot",
       "board","winline","winlineSeg",
@@ -588,14 +609,27 @@ const UI = (() => {
   }
 
   function bindControls() {
-    // Mode
+    // Mode (ai / pvp)
     els.modeSeg.querySelectorAll(".seg-btn").forEach(b => {
       b.addEventListener("click", () => {
         els.modeSeg.querySelectorAll(".seg-btn").forEach(x => x.classList.remove("active"));
         b.classList.add("active");
-        const mode = b.dataset.mode;
-        Game.setMode(mode);
-        els.diffCard.style.display = mode === "ai" ? "" : "none";
+        Game.setMode(b.dataset.mode);
+        const s = Game.getPublicState();
+        els.diffCard.style.display = b.dataset.mode === "ai" ? "" : "none";
+        startNewGame();
+      });
+    });
+
+    // Glissant toggle
+    els.slidingSeg.querySelectorAll(".seg-btn").forEach(b => {
+      b.addEventListener("click", () => {
+        els.slidingSeg.querySelectorAll(".seg-btn").forEach(x => x.classList.remove("active"));
+        b.classList.add("active");
+        const isSliding = b.dataset.sliding === "on";
+        Game.setSliding(isSliding);
+        els.sizeCard.style.display    = isSliding ? "none" : "";
+        els.slidingHint.style.display = isSliding ? "" : "none";
         startNewGame();
       });
     });
@@ -695,16 +729,19 @@ const UI = (() => {
 
   function refreshFromState() {
     const s = Game.getPublicState();
-    // Re-rend toutes les cellules
     buildBoard(s.size);
     s.moves.forEach(m => {
       const cell = els.board.querySelector(`.cell[data-index="${m.index}"]`);
+      if (!cell) return;
+      // En mode glissant, ne rendre que les cases encore occupées dans le board
+      if (s.sliding && s.board[m.index] !== m.player) return;
       cell.classList.add("filled", m.player.toLowerCase());
       const span = document.createElement("span");
       span.className = "mark";
       span.textContent = symbolFor(m.player);
       cell.appendChild(span);
     });
+    if (s.sliding) updateNextToGo(s.marksByPlayer);
     resetWinline();
     renderTurn(s.currentPlayer);
     els.btnUndo.disabled = s.moves.length === 0;
@@ -714,9 +751,10 @@ const UI = (() => {
     Game.reset();
     refreshAll();
     els.tip.textContent = pickTip();
-
-    // Si l'IA commence (futur ?), on la lance.
     const s = Game.getPublicState();
+    els.sizeCard.style.display    = s.sliding ? "none" : "";
+    els.slidingHint.style.display = s.sliding ? "" : "none";
+    els.diffCard.style.display    = s.mode === "ai" ? "" : "none";
     if (s.mode === "ai" && s.currentPlayer === s.aiSymbol) {
       Game.aiPlay();
     }
@@ -770,11 +808,13 @@ const UI = (() => {
       renderTurn(player);
       const s = Game.getPublicState();
       els.btnUndo.disabled = s.moves.length === 0 || s.finished;
+      if (s.sliding) updateNextToGo(s.marksByPlayer);
       // L'IA joue
       if (s.mode === "ai" && player === s.aiSymbol && !s.finished) {
         Game.aiPlay();
       }
     });
+    Game.on("onRemove",  payload => renderRemove(payload));
     Game.on("onMove",    payload => {
       renderMove(payload);
       const s = Game.getPublicState();

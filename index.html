@@ -40,6 +40,13 @@
           <button class="seg-btn active" data-mode="ai">vs IA</button>
           <button class="seg-btn" data-mode="pvp">vs Joueur</button>
         </div>
+        <div id="slidingRow" style="margin-top:8px">
+          <div class="seg" role="tablist" id="slidingSeg">
+            <button class="seg-btn active" data-sliding="off">Normal</button>
+            <button class="seg-btn" data-sliding="on">⟳ Glissant</button>
+          </div>
+        </div>
+        <p class="hint" id="slidingHint" style="display:none">3 marques max par joueur — la plus ancienne disparaît à chaque nouveau coup. Grille 3×3 uniquement.</p>
       </section>
 
       <section class="card" id="diffCard">
@@ -52,7 +59,7 @@
         <p class="hint" id="diffHint">L'IA bloque vos coups gagnants.</p>
       </section>
 
-      <section class="card">
+      <section class="card" id="sizeCard">
         <h2>📐 GRILLE</h2>
         <div class="seg" id="sizeSeg">
           <button class="seg-btn active" data-size="3">3×3</button>
