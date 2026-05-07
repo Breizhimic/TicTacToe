@@ -452,7 +452,9 @@ html, body {
   stroke-linecap: round;
   filter: drop-shadow(0 0 10px var(--win-color));
   vector-effect: non-scaling-stroke;
-  /* dasharray/dashoffset et transition gérés entièrement en JS */
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 0.6s ease-out;
 }
 
 /* =========================================================

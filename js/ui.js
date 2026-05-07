@@ -205,11 +205,12 @@ const UI = (() => {
   function resetWinline() {
     const seg = els.winlineSeg;
     seg.style.transition       = "none";
-    seg.style.strokeDasharray  = "0";
-    seg.style.strokeDashoffset = "0";
+    seg.style.strokeDashoffset = "1000";
     seg.setAttribute("x1", 0); seg.setAttribute("y1", 0);
     seg.setAttribute("x2", 0); seg.setAttribute("y2", 0);
     els.winline.classList.remove("show");
+    void seg.getBoundingClientRect();
+    seg.style.transition = "";
   }
 
   function renderReset() {
@@ -321,37 +322,28 @@ const UI = (() => {
     const first = line[0];
     const last  = line[line.length - 1];
 
-    // Lire les positions réelles des cellules dans le DOM pour tenir compte
-    // du padding et du gap de la grille CSS (sinon le trait est fragmenté).
-    const boardRect = els.board.getBoundingClientRect();
-    const svgRect   = els.winline.getBoundingClientRect();
-
+    // Lire les centres réels des cellules dans le DOM (tient compte du padding et gap CSS)
+    const svgRect = els.winline.getBoundingClientRect();
     function cellCenter(idx) {
-      const cell = els.board.querySelector(`.cell[data-index="${idx}"]`);
-      const r = cell.getBoundingClientRect();
-      // Convertir en coordonnées relatives au SVG, exprimées en % du viewBox 100×100
+      const r = els.board.querySelector(`.cell[data-index="${idx}"]`).getBoundingClientRect();
       return {
         x: ((r.left + r.width  / 2) - svgRect.left) / svgRect.width  * 100,
         y: ((r.top  + r.height / 2) - svgRect.top)  / svgRect.height * 100
       };
     }
-
     const p1 = cellCenter(first);
     const p2 = cellCenter(last);
 
-    // Longueur réelle en unités SVG (viewBox 100×100)
-    const len = Math.hypot(p2.x - p1.x, p2.y - p1.y);
-
     const seg = els.winlineSeg;
-    seg.style.transition       = "none";
-    seg.style.strokeDasharray  = len;
-    seg.style.strokeDashoffset = len;
+    // Placer le segment sans transition, dashoffset élevé (caché)
+    seg.style.transition = "none";
     seg.setAttribute("x1", p1.x); seg.setAttribute("y1", p1.y);
     seg.setAttribute("x2", p2.x); seg.setAttribute("y2", p2.y);
-    els.winline.classList.add("show");
+    // Forcer reflow puis lancer la transition vers 0 (trait visible)
     void seg.getBoundingClientRect();
-    seg.style.transition       = "stroke-dashoffset 0.6s ease-out";
+    seg.style.transition = "";
     seg.style.strokeDashoffset = "0";
+    els.winline.classList.add("show");
   }
 
   // ============ MODALE FIN DE PARTIE ============
